@@ -1,0 +1,121 @@
+interface Character {
+  id: String!
+  name: String!
+  friends: [Character!]!
+  appearsIn: [Episode!]!
+}
+
+
+# A mechanical creature in the Star Wars universe.
+type Droid implements Character {
+  # The id of the droid.
+  id: String!
+
+  # The name of the droid.
+  name: String!
+
+  # The friends of the droid, or an empty list if they have none.
+  friends: [Character!]!
+
+  # Which movies they appear in.
+  appearsIn: [Episode!]!
+
+  # The primary function of the droid.
+  primaryFunction: String
+}
+
+type DroidConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DroidEdge]
+}
+
+# An edge in a connection.
+type DroidEdge {
+  # The item at the end of the edge
+  node: Droid!
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# One of the films in the Star Wars Trilogy
+enum Episode {
+  # Released in 1977.
+  NEW_HOPE
+
+  # Released in 1980.
+  EMPIRE
+
+  # Released in 1983.
+  JEDI
+}
+
+# A humanoid creature in the Star Wars universe.
+type Human implements Character {
+  # The id of the human.
+  id: String!
+
+  # The name of the human.
+  name: String!
+
+  # The friends of the human, or an empty list if they have none.
+  friends: [Character!]!
+
+  # Which movies they appear in.
+  appearsIn: [Episode!]!
+
+  # The home planet of the human, or null if unknown.
+  homePlanet: String
+}
+
+type HumanConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [HumanEdge]
+}
+
+# An edge in a connection.
+type HumanEdge {
+  # The item at the end of the edge
+  node: Human!
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# Information about pagination in a connection
+type PageInfo {
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Query {
+  hero(
+    # If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.
+    episode: Episode!
+  ): Character!
+  human(
+    # id of the human
+    id: String!
+  ): Human
+  humans(after: String, before: String, first: Int, last: Int): HumanConnection!
+  droid(
+    # id of the droid
+    id: String!
+  ): Droid
+  droids(after: String, before: String, first: Int, last: Int): DroidConnection!
+}
